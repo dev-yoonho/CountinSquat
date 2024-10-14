@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Squat Counter</title>
+</head>
+<body>
+<h1>Squat Counter</h1>
+<button onclick="startCamera()">Start Camera Squat Counter</button>
+<form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" id="videoFile" name="file" accept="video/*">
+    <button type="button" onclick="uploadVideo()">Upload Video</button>
+</form>
+<p id="message"></p>
+
+<script>
+    function startCamera() {
+        fetch('/start_camera')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('message').innerText = data.message;
+            });
+    }
+
+    function uploadVideo() {
+        const formData = new FormData();
+        const fileInput = document.getElementById('videoFile');
+        formData.append('file', fileInput.files[0]);
+
+        fetch('/upload_video', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('message').innerText = data.message;
+            });
+    }
+</script>
+</body>
+</html>
